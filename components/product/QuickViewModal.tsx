@@ -26,10 +26,13 @@ export default function QuickViewModal() {
     setQuantity(1);
     setAdded(false);
     if (quickViewProduct) {
-      const sizes: string[] = quickViewProduct.variants?.length > 0
-        ? [...new Set(quickViewProduct.variants.filter((v: any) => v.size).map((v: any) => v.size))]
-        : [];
-      if (sizes.length > 0) setSelectedSize(sizes[0]);
+      const sizeValues: string[] = [];
+      if (quickViewProduct.variants?.length) {
+        for (const v of quickViewProduct.variants) {
+          if (v.size && !sizeValues.includes(v.size)) sizeValues.push(v.size);
+        }
+      }
+      if (sizeValues.length > 0) setSelectedSize(sizeValues[0]);
     }
   }, [quickViewProduct]);
 
@@ -37,9 +40,16 @@ export default function QuickViewModal() {
 
   const product = quickViewProduct;
   const discount = getDiscountPercentage(product.mrp, product.sellingPrice);
-  const availableSizes: string[] = product.variants?.length > 0
-    ? [...new Set(product.variants.filter((v: any) => v.size).map((v: any) => v.size))]
-    : [];
+  const availableSizes: string[] = [];
+  if (product.variants?.length) {
+    const seen = new Set<string>();
+    for (const v of product.variants) {
+      if (v.size && !seen.has(v.size)) {
+        seen.add(v.size);
+        availableSizes.push(v.size);
+      }
+    }
+  }
   const getVariantForSize = (size: string) => product.variants?.find((v: any) => v.size === size);
 
   const handleAddToCart = () => {
