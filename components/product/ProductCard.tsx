@@ -51,15 +51,38 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             />
           )}
           {discount > 0 && (
-            <span className="absolute top-3 left-3 bg-black text-white text-[10px] px-2.5 py-1 rounded-full font-semibold tracking-wider uppercase shadow-lg">
+            <span className="absolute top-3 left-3 bg-black text-white text-[10px] px-2.5 py-1 rounded-full font-semibold tracking-wider uppercase shadow-lg z-10">
               -{discount}%
             </span>
           )}
-          {product.labels?.includes("new") && (
-            <span className="absolute top-3 right-3 bg-white text-black text-[10px] px-2.5 py-1 rounded-full font-semibold tracking-wider uppercase shadow-lg">
-              New
-            </span>
-          )}
+
+          <div className="absolute top-3 right-3 flex flex-col gap-1.5 z-10">
+            {product.labels?.includes("trending") && (
+              <span className="bg-purple-600 text-white text-[9px] px-2 py-0.5 rounded-full font-semibold tracking-wider uppercase shadow-lg">
+                Trending
+              </span>
+            )}
+            {product.labels?.includes("limited_edition") && (
+              <span className="bg-amber-600 text-white text-[9px] px-2 py-0.5 rounded-full font-semibold tracking-wider uppercase shadow-lg">
+                Limited
+              </span>
+            )}
+            {product.labels?.includes("bestseller") && (
+              <span className="bg-blue-600 text-white text-[9px] px-2 py-0.5 rounded-full font-semibold tracking-wider uppercase shadow-lg">
+                Best Seller
+              </span>
+            )}
+            {product.labels?.includes("new") && (
+              <span className="bg-white text-black text-[9px] px-2 py-0.5 rounded-full font-semibold tracking-wider uppercase shadow-lg">
+                New
+              </span>
+            )}
+            {product.labels?.includes("sale") && (
+              <span className="bg-red-600 text-white text-[9px] px-2 py-0.5 rounded-full font-semibold tracking-wider uppercase shadow-lg">
+                Sale
+              </span>
+            )}
+          </div>
 
           <button
             onClick={(e) => {
@@ -100,7 +123,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             Quick View
           </button>
 
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300" />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300 pointer-events-none" />
         </div>
       </Link>
 

@@ -40,8 +40,8 @@ export default function NewArrivals() {
           className="flex items-end justify-between mb-10"
         >
           <div>
-            <h2 className="text-2xl md:text-4xl font-bold tracking-tight">New Arrivals</h2>
-            <p className="mt-2 text-sm text-gray-500">Fresh drops to elevate your style</p>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">New Arrivals</h2>
+            <p className="mt-1 text-sm text-gray-500">Fresh drops to elevate your style</p>
           </div>
           <div className="hidden md:flex items-center gap-2">
             <button
@@ -60,11 +60,11 @@ export default function NewArrivals() {
         </motion.div>
         <div
           ref={scrollRef}
-          className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory"
+          className="flex gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {products.map((product, i) => (
-            <div key={product._id} className="min-w-[220px] md:min-w-[280px] snap-start">
+            <div key={product._id} className="min-w-[140px] md:min-w-[175px] snap-start">
               <ProductCard product={product} index={i} />
             </div>
           ))}

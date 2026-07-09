@@ -183,12 +183,12 @@ export default function ProductDetailPage() {
               {product.description || "Premium quality fabric with a modern fit. Designed for comfort and style."}
             </p>
 
-            <div className="mt-8">
-              <p className="text-xs tracking-widest uppercase font-medium mb-3">
+            <div className="mt-6">
+              <p className="text-xs tracking-widest uppercase font-medium mb-2">
                 Select Size <span className="text-red-500">*</span>
               </p>
               {availableSizes.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {availableSizes.map((v: any) => {
                     const outOfStock = v.stock !== undefined && v.stock <= 0;
                     return (
@@ -196,7 +196,7 @@ export default function ProductDetailPage() {
                         key={v.size}
                         onClick={() => !outOfStock && setSelectedSize(v.size)}
                         disabled={outOfStock}
-                        className={`w-12 h-12 rounded-full border text-sm font-medium transition-all ${
+                        className={`w-10 h-10 rounded-lg border text-xs font-medium transition-all ${
                           selectedSize === v.size
                             ? "bg-black text-white border-black"
                             : outOfStock
@@ -214,7 +214,7 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            <div className="flex items-center gap-4 mt-8">
+            <div className="flex items-center gap-4 mt-6">
               <div className="flex items-center border rounded-full">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
