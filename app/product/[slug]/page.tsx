@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Heart, Share2, Truck, RotateCcw, Shield } from "lucide-react";
 import api from "@/lib/api";
-import { formatPrice, getDiscountPercentage, getImageUrl } from "@/lib/utils";
+import { formatPrice, getImageUrl } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
@@ -27,6 +27,7 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedVariantIdx, setSelectedVariantIdx] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
   const user = useAuthStore((s) => s.user);
@@ -54,19 +55,32 @@ export default function ProductDetailPage() {
     fetch();
   }, [slug]);
 
-  const availableSizes = useMemo(() => {
-    if (!product?.variants?.length) return [];
-    const unique = new Map();
-    product.variants.forEach((v: any) => {
-      if (v.size && !unique.has(v.size)) unique.set(v.size, v);
-    });
-    return Array.from(unique.values());
-  }, [product?.variants]);
+  const allVariants = product?.variants || [];
 
-  const selectedVariant = useMemo(() => {
-    if (!selectedSize || !product?.variants?.length) return null;
-    return product.variants.find((v: any) => v.size === selectedSize) || null;
-  }, [selectedSize, product?.variants]);
+  const currentVariant = allVariants[selectedVariantIdx] || null;
+
+  const availableSizes = useMemo(() => {
+    return currentVariant?.sizes || [];
+  }, [currentVariant]);
+
+  const selectedSizesItem = useMemo(() => {
+    if (!selectedSize || !currentVariant?.sizes) return null;
+    return currentVariant.sizes.find((s: any) => s.size === selectedSize) || null;
+  }, [selectedSize, currentVariant]);
+
+  const currentVariantImages = useMemo(() => {
+    if (currentVariant?.images?.length > 0) {
+      return currentVariant.images.map((url: string) => ({ url, type: "variant" }));
+    }
+    return null;
+  }, [currentVariant]);
+
+  const displayImages = currentVariantImages || (product?.primaryImage ? [{ url: product.primaryImage, type: "primary" }] : product?.images?.length ? product.images : [{ url: "/placeholder.svg", type: "front" }]);
+
+  const displayPrice = selectedSizesItem?.price ?? product?.sellingPrice;
+  const displayMrp = product?.mrp;
+  const discount = displayMrp ? Math.round(((displayMrp - displayPrice) / displayMrp) * 100) : 0;
+  const mainImage = displayImages[0]?.url || getImageUrl(product?.images);
 
   if (loading) {
     return (
@@ -93,12 +107,6 @@ export default function ProductDetailPage() {
     );
   }
 
-  const images = product.images?.length ? product.images : [{ url: "/placeholder.svg", type: "front" }];
-
-  const displayPrice = selectedVariant?.price ?? product.sellingPrice;
-  const displayMrp = product.mrp;
-  const discount = getDiscountPercentage(displayMrp, displayPrice);
-
   const handleAddToCart = async () => {
     if (!user) { setLoginOpen(true); return; }
     await addToCart({
@@ -108,8 +116,8 @@ export default function ProductDetailPage() {
       quantity,
       size: selectedSize,
       color: "",
-      image: getImageUrl(product.images),
-      stock: selectedVariant?.stock ?? product.stock,
+      image: mainImage,
+      stock: selectedSizesItem?.stock ?? product.stock,
     });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
@@ -124,8 +132,8 @@ export default function ProductDetailPage() {
       quantity,
       size: selectedSize,
       color: "",
-      image: getImageUrl(product.images),
-      stock: selectedVariant?.stock ?? product.stock,
+      image: mainImage,
+      stock: selectedSizesItem?.stock ?? product.stock,
     });
     router.push("/checkout");
   };
@@ -136,23 +144,51 @@ export default function ProductDetailPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-4">
         <div className="space-y-3">
-          <ImageZoom
-            key={selectedImage}
-            src={images[selectedImage]?.url || images[0]?.url}
-            alt={product.name}
-            discount={discount}
-          />
-          {images.length > 1 && (
-            <div className="flex gap-2 overflow-auto pb-2">
-              {images.map((img: any, i: number) => (
+          <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-gray-50">
+            <ImageZoom
+              key={`${selectedSize}-${selectedImage}`}
+              src={displayImages[selectedImage]?.url || displayImages[0]?.url}
+              alt={product.name}
+              discount={discount}
+            />
+          </div>
+          {displayImages.length > 1 && (
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
+              {displayImages.map((img: any, i: number) => (
                 <button
                   key={i}
                   onClick={() => setSelectedImage(i)}
-                  className={`shrink-0 w-16 h-20 rounded-lg overflow-hidden border-2 transition-colors ${
-                    selectedImage === i ? "border-black" : "border-transparent"
+                  className={`shrink-0 w-14 h-18 sm:w-16 sm:h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                    selectedImage === i
+                      ? "border-black ring-1 ring-black"
+                      : "border-transparent hover:border-gray-300"
                   }`}
                 >
                   <img src={img.url} alt="" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
+          {allVariants.length > 1 && (
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin border-t pt-3">
+              {allVariants.map((v: any, i: number) => (
+                <button
+                  key={i}
+                  onClick={() => { setSelectedVariantIdx(i); setSelectedImage(0); setSelectedSize(""); }}
+                  className={`shrink-0 w-14 h-18 sm:w-16 sm:h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                    selectedVariantIdx === i
+                      ? "border-black ring-1 ring-black"
+                      : "border-transparent hover:border-gray-300"
+                  }`}
+                >
+                  <img
+                    src={v.images?.[0] || "/placeholder.svg"}
+                    alt={v.name || `Variant ${i + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  <span className="block text-[10px] text-center leading-tight text-gray-600 truncate px-0.5">
+                    {v.name || `V${i + 1}`}
+                  </span>
                 </button>
               ))}
             </div>
@@ -176,7 +212,7 @@ export default function ProductDetailPage() {
             <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
               <span className="text-green-600 font-medium">In Stock</span>
               <span>|</span>
-              <span>{selectedVariant?.stock ?? product.stock} units</span>
+              <span>{selectedSizesItem?.stock ?? product.stock} units</span>
             </div>
 
             <p className="mt-6 text-gray-600 leading-relaxed">
@@ -189,22 +225,22 @@ export default function ProductDetailPage() {
               </p>
               {availableSizes.length > 0 ? (
                 <div className="flex flex-wrap gap-1.5">
-                  {availableSizes.map((v: any) => {
-                    const outOfStock = v.stock !== undefined && v.stock <= 0;
+                  {availableSizes.map((s: any) => {
+                    const outOfStock = s.stock !== undefined && s.stock <= 0;
                     return (
                       <button
-                        key={v.size}
-                        onClick={() => !outOfStock && setSelectedSize(v.size)}
+                        key={s.size}
+                        onClick={() => { setSelectedSize(s.size); setSelectedImage(0); }}
                         disabled={outOfStock}
                         className={`w-10 h-10 rounded-lg border text-xs font-medium transition-all ${
-                          selectedSize === v.size
+                          selectedSize === s.size
                             ? "bg-black text-white border-black"
                             : outOfStock
                             ? "border-gray-200 text-gray-300 line-through cursor-not-allowed"
                             : "border-gray-300 text-gray-600 hover:border-black"
                         }`}
                       >
-                        {v.size}
+                        {s.size}
                       </button>
                     );
                   })}

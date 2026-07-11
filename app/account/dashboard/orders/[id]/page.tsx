@@ -76,7 +76,11 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               />
               <div className="flex-1">
                 <p className="font-medium text-sm">{item.product?.name || "Product"}</p>
-                {item.variant?.size && <p className="text-xs text-gray-500">Size: {item.variant.size}</p>}
+                <p className="text-xs text-gray-500">
+                  {item.variant?.color && `${item.variant.color}`}
+                  {item.variant?.color && item.variant?.size && " / "}
+                  {item.variant?.size && `Size: ${item.variant.size}`}
+                </p>
               </div>
               <div className="text-right">
                 <p className="font-medium">{formatPrice(item.price)}</p>

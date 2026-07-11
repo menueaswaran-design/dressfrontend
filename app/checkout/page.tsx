@@ -159,6 +159,9 @@ export default function CheckoutPage() {
                   />
                   <div className="flex-1 min-w-0">
                     <p className="truncate font-medium">{item.name}</p>
+                    <p className="text-gray-500 text-xs">
+                      {(item.size || item.color) && `${item.color || ''}${item.color && item.size ? ' / ' : ''}${item.size ? `Size: ${item.size}` : ''}`}
+                    </p>
                     <p className="text-gray-500 text-xs">Qty: {item.quantity}</p>
                   </div>
                   <p className="font-medium">{formatPrice(item.price * item.quantity)}</p>

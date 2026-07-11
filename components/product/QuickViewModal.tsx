@@ -7,7 +7,7 @@ import { useUIStore } from "@/store/ui";
 import { useAuthStore } from "@/store/auth";
 import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
-import { formatPrice, getDiscountPercentage, getImageUrl } from "@/lib/utils";
+import { formatPrice, getImageUrl } from "@/lib/utils";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 
@@ -18,52 +18,40 @@ export default function QuickViewModal() {
   const addToCart = useCartStore((s) => s.addItem);
   const { isInWishlist, addItem, removeItem } = useWishlistStore();
   const [selectedSize, setSelectedSize] = useState("");
+  const [selectedVariantIdx, setSelectedVariantIdx] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
     setSelectedSize("");
+    setSelectedVariantIdx(0);
     setQuantity(1);
     setAdded(false);
-    if (quickViewProduct) {
-      const sizeValues: string[] = [];
-      if (quickViewProduct.variants?.length) {
-        for (const v of quickViewProduct.variants) {
-          if (v.size && !sizeValues.includes(v.size)) sizeValues.push(v.size);
-        }
-      }
-      if (sizeValues.length > 0) setSelectedSize(sizeValues[0]);
-    }
   }, [quickViewProduct]);
 
   if (!quickViewProduct) return null;
 
   const product = quickViewProduct;
-  const discount = getDiscountPercentage(product.mrp, product.sellingPrice);
-  const availableSizes: string[] = [];
-  if (product.variants?.length) {
-    const seen = new Set<string>();
-    for (const v of product.variants) {
-      if (v.size && !seen.has(v.size)) {
-        seen.add(v.size);
-        availableSizes.push(v.size);
-      }
-    }
-  }
-  const getVariantForSize = (size: string) => product.variants?.find((v: any) => v.size === size);
+  const allVariants = product.variants || [];
+  const currentVariant = allVariants[selectedVariantIdx] || null;
+  const availableSizes = currentVariant?.sizes || [];
+  const selectedSizeItem = availableSizes.find((s: any) => s.size === selectedSize) || null;
+  const displayPrice = selectedSizeItem?.price || product.sellingPrice;
+  const discount = product.mrp ? Math.round(((product.mrp - displayPrice) / product.mrp) * 100) : 0;
+  const variantImages = currentVariant?.images?.length > 0 ? currentVariant.images : null;
+  const mainImage = variantImages?.[0] || product.primaryImage || getImageUrl(product.images);
 
   const handleAddToCart = () => {
     if (!user) { setLoginOpen(true); return; }
-    const variant = getVariantForSize(selectedSize);
     addToCart({
       _id: product._id,
       name: product.name,
-      price: variant?.price || product.sellingPrice,
+      price: displayPrice,
       quantity,
       size: selectedSize,
       color: "",
-      image: getImageUrl(product.images),
-      stock: variant?.stock ?? product.stock,
+      image: mainImage,
+      stock: selectedSizeItem?.stock ?? product.stock,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -77,19 +65,50 @@ export default function QuickViewModal() {
       className="p-0 overflow-hidden"
     >
       <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="aspect-[3/4] bg-gray-100">
+        <div className="relative aspect-[3/4] bg-gray-100">
           <img
-            src={getImageUrl(product.images)}
+            src={mainImage}
             alt={product.name}
             className="w-full h-full object-cover"
           />
+          {variantImages && variantImages.length > 1 && (
+            <div className="absolute bottom-3 left-3 right-3 flex gap-1.5 overflow-x-auto">
+              {variantImages.map((url: string, i: number) => (
+                <button
+                  key={i}
+                  className="shrink-0 w-10 h-12 rounded-md overflow-hidden border-2 border-white/80 shadow-sm"
+                >
+                  <img src={url} alt="" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
+          {allVariants.length > 1 && (
+            <div className="absolute bottom-16 left-3 right-3 flex gap-1.5 overflow-x-auto">
+              {allVariants.map((v: any, i: number) => (
+                <button
+                  key={i}
+                  onClick={() => { setSelectedVariantIdx(i); setSelectedSize(""); }}
+                  className={`shrink-0 w-10 h-12 rounded-md overflow-hidden border-2 transition-all ${
+                    selectedVariantIdx === i ? "border-black" : "border-white/80"
+                  } shadow-sm`}
+                >
+                  <img
+                    src={v.images?.[0] || "/placeholder.svg"}
+                    alt={v.name || `V${i + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <div className="p-6 md:p-8 flex flex-col">
           <div className="flex-1">
             <h2 className="text-xl md:text-2xl font-bold">{product.name}</h2>
             <div className="flex items-center gap-3 mt-3">
-              <span className="text-xl font-semibold">{formatPrice(product.sellingPrice)}</span>
-              {product.mrp > product.sellingPrice && (
+              <span className="text-xl font-semibold">{formatPrice(displayPrice)}</span>
+              {product.mrp > displayPrice && (
                 <>
                   <span className="text-gray-400 line-through">{formatPrice(product.mrp)}</span>
                   <span className="text-sm text-green-600 font-medium">-{discount}% OFF</span>
@@ -104,23 +123,22 @@ export default function QuickViewModal() {
             <div className="mt-6">
               <p className="text-xs tracking-widest uppercase font-medium mb-3">Select Size</p>
               <div className="flex flex-wrap gap-2">
-                {availableSizes.length > 0 ? availableSizes.map((size: string) => {
-                  const variant = getVariantForSize(size);
-                  const outOfStock = variant && variant.stock < 1;
+                {availableSizes.length > 0 ? availableSizes.map((s: any) => {
+                  const outOfStock = s.stock < 1;
                   return (
                     <button
-                      key={size}
-                      onClick={() => !outOfStock && setSelectedSize(size)}
+                      key={s.size}
+                      onClick={() => !outOfStock && setSelectedSize(s.size)}
                       disabled={outOfStock}
                       className={`w-12 h-12 rounded-full border text-sm font-medium transition-all ${
-                        selectedSize === size
+                        selectedSize === s.size
                           ? "bg-black text-white border-black"
                           : outOfStock
                             ? "border-gray-200 text-gray-300 line-through cursor-not-allowed"
                             : "border-gray-300 text-gray-600 hover:border-black"
                       }`}
                     >
-                      {size}
+                      {s.size}
                     </button>
                   );
                 }) : (
