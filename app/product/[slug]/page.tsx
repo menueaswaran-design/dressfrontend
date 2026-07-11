@@ -17,6 +17,7 @@ import Accordion from "@/components/ui/Accordion";
 import ProductCard from "@/components/product/ProductCard";
 import ImageZoom from "@/components/product/ImageZoom";
 import { Skeleton } from "@/components/ui/Skeleton";
+import ReadMore from "@/components/ui/ReadMore";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -215,9 +216,9 @@ export default function ProductDetailPage() {
               <span>{selectedSizesItem?.stock ?? product.stock} units</span>
             </div>
 
-            <p className="mt-6 text-gray-600 leading-relaxed">
-              {product.description || "Premium quality fabric with a modern fit. Designed for comfort and style."}
-            </p>
+            <div className="mt-6">
+              <ReadMore text={product.description} fallback="Premium quality fabric with a modern fit. Designed for comfort and style." />
+            </div>
 
             <div className="mt-6">
               <p className="text-xs tracking-widest uppercase font-medium mb-2">

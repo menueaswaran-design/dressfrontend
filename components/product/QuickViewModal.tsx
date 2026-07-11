@@ -10,6 +10,7 @@ import { useWishlistStore } from "@/store/wishlist";
 import { formatPrice, getImageUrl } from "@/lib/utils";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
+import ReadMore from "@/components/ui/ReadMore";
 
 export default function QuickViewModal() {
   const { isQuickViewOpen, setQuickViewOpen, quickViewProduct } = useUIStore();
@@ -116,9 +117,9 @@ export default function QuickViewModal() {
               )}
             </div>
 
-            <p className="text-sm text-gray-500 mt-4 leading-relaxed">
-              {product.description || "Premium quality fabric with a modern fit."}
-            </p>
+            <div className="mt-4">
+              <ReadMore text={product.description} fallback="Premium quality fabric with a modern fit." className="text-sm text-gray-500" />
+            </div>
 
             <div className="mt-6">
               <p className="text-xs tracking-widest uppercase font-medium mb-3">Select Size</p>
