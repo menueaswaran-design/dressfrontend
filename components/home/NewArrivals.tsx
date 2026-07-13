@@ -43,7 +43,7 @@ export default function NewArrivals() {
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight">New Arrivals</h2>
             <p className="mt-1 text-sm text-gray-500">Fresh drops to elevate your style</p>
           </div>
-          <div className="hidden md:flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => scroll("left")}
               className="p-2 border rounded-full hover:bg-gray-100 transition-colors"

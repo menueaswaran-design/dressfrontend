@@ -102,7 +102,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
                 addItem(item);
               }
             }}
-            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg"
+            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg"
             aria-label={isInWishlist(product._id) ? "Remove from wishlist" : "Add to wishlist"}
           >
             <Heart
@@ -117,10 +117,10 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
               e.stopPropagation();
               setQuickViewOpen(true, product);
             }}
-            className="absolute bottom-3 left-1/2 -translate-x-1/2 px-5 py-2.5 bg-white/95 backdrop-blur-sm rounded-full text-xs font-semibold tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white shadow-lg flex items-center gap-1.5"
+            className="absolute bottom-3 left-1/2 -translate-x-1/2 p-2 md:px-5 md:py-2.5 bg-white/90 backdrop-blur-sm rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg flex items-center gap-1.5"
           >
-            <Eye size={14} />
-            Quick View
+            <Eye size={16} />
+            <span className="hidden md:inline text-xs font-semibold tracking-wider uppercase">Quick View</span>
           </button>
 
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300 pointer-events-none" />

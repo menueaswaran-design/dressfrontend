@@ -35,7 +35,7 @@ export default function FeaturedCollections() {
           </div>
           <Link
             href="/shop"
-            className="hidden sm:flex items-center gap-1 text-sm font-medium hover:underline"
+            className="flex items-center gap-1 text-sm font-medium hover:underline"
           >
             View All <ArrowRight size={14} />
           </Link>

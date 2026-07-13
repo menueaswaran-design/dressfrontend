@@ -13,6 +13,12 @@ const defaultCategories = [
   { name: "Summer Collection", slug: "summer-collection", thumbnail: "" },
   { name: "New Arrivals", slug: "new-arrivals", thumbnail: "" },
   { name: "Best Sellers", slug: "best-sellers", thumbnail: "" },
+  { name: "Casual Shirts", slug: "casual-shirts", thumbnail: "" },
+  { name: "Formal Wear", slug: "formal-wear", thumbnail: "" },
+  { name: "Accessories", slug: "accessories", thumbnail: "" },
+  { name: "Winter Wear", slug: "winter-wear", thumbnail: "" },
+  { name: "Sportswear", slug: "sportswear", thumbnail: "" },
+  { name: "Footwear", slug: "footwear", thumbnail: "" },
 ];
 
 export default function FeaturedCategories() {
@@ -23,7 +29,7 @@ export default function FeaturedCategories() {
     const fetch = async () => {
       try {
         const { data } = await api.get("/categories");
-        setCategories(data.data?.slice(0, 6) || defaultCategories);
+        setCategories(data.data?.slice(0, 12) || defaultCategories);
       } catch {
         setCategories(defaultCategories);
       }
@@ -37,7 +43,7 @@ export default function FeaturedCategories() {
       <section className="py-12 md:py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
+            {Array.from({ length: 12 }).map((_, i) => (
               <Skeleton key={i} className="aspect-square rounded-xl" />
             ))}
           </div>
@@ -58,7 +64,7 @@ export default function FeaturedCategories() {
           <h2 className="text-2xl md:text-4xl font-bold tracking-tight">Shop by Category</h2>
           <p className="mt-2 text-sm text-gray-500">Explore our curated collections</p>
         </motion.div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-h-[360px] md:max-h-[220px] overflow-y-auto overscroll-contain pb-1 scrollbar-thin">
           {categories.map((cat, i) => (
                 <motion.div
                   key={cat._id || cat.slug}

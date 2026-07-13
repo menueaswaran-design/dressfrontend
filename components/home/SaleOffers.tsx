@@ -14,7 +14,7 @@ export default function SaleOffers() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const { data } = await api.get("/products", { params: { label: "sale", limit: 4 } });
+        const { data } = await api.get("/products", { params: { label: "sale", limit: 10 } });
         setProducts(data.data || []);
       } catch {}
       setLoading(false);
@@ -43,18 +43,23 @@ export default function SaleOffers() {
           </div>
           <Link
             href="/shop"
-            className="hidden md:inline-flex items-center gap-1 text-sm font-medium tracking-wider uppercase text-red-500 hover:text-red-600 transition-colors"
+            className="inline-flex items-center gap-1 text-sm font-medium tracking-wider uppercase text-red-500 hover:text-red-600 transition-colors"
           >
             Shop Sale
             <Tag size={14} />
           </Link>
         </motion.div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div
+          className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
           {products.map((product, i) => (
-            <ProductCard key={product._id} product={product} index={i} />
+            <div key={product._id} className="min-w-[140px] md:min-w-[200px] snap-start">
+              <ProductCard product={product} index={i} />
+            </div>
           ))}
           {loading && Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="space-y-3">
+            <div key={i} className="min-w-[140px] md:min-w-[200px] space-y-3">
               <div className="aspect-[3/4] bg-gray-200 rounded-xl animate-pulse" />
               <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse" />
               <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse" />

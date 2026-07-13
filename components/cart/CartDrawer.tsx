@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Plus, ShoppingBag } from "lucide-react";
@@ -9,6 +10,15 @@ import Button from "@/components/ui/Button";
 
 export default function CartDrawer() {
   const { items, isOpen, setIsOpen, removeItem, updateQuantity, getTotal } = useCartStore();
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
@@ -28,7 +38,7 @@ export default function CartDrawer() {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed top-0 right-0 bottom-0 w-full max-w-md z-50 bg-white shadow-xl flex flex-col"
           >
-            <div className="flex items-center justify-between p-4 border-b">
+            <div className="flex items-center justify-between p-4 border-b shrink-0">
               <h2 className="text-lg font-semibold flex items-center gap-2">
                 <ShoppingBag size={20} />
                 Cart ({items.length})
@@ -38,7 +48,7 @@ export default function CartDrawer() {
               </button>
             </div>
 
-            <div className="flex-1 overflow-auto p-4 space-y-4">
+            <div className="flex-1 min-h-0 overflow-y-auto overscroll-behavior-contain p-4 space-y-4">
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-gray-400">
                   <ShoppingBag size={48} />
@@ -50,7 +60,7 @@ export default function CartDrawer() {
                     <img
                       src={item.image || "/placeholder.svg"}
                       alt={item.name}
-                      className="w-20 h-24 object-cover rounded-md"
+                      className="w-20 h-24 object-cover rounded-md shrink-0"
                     />
                     <div className="flex-1 min-w-0">
                       <h3 className="font-medium text-sm truncate">{item.name}</h3>
@@ -80,7 +90,7 @@ export default function CartDrawer() {
                     </div>
                     <button
                       onClick={() => removeItem(item._id, item.size, item.color)}
-                      className="text-gray-400 hover:text-red-500 transition-colors"
+                      className="shrink-0 text-gray-400 hover:text-red-500 transition-colors"
                     >
                       <X size={16} />
                     </button>
@@ -90,7 +100,7 @@ export default function CartDrawer() {
             </div>
 
             {items.length > 0 && (
-              <div className="border-t p-4 space-y-3">
+              <div className="border-t p-4 space-y-3 shrink-0">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-500">Subtotal</span>
                   <span className="font-medium">{formatPrice(getTotal())}</span>

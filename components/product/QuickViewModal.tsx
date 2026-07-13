@@ -63,7 +63,7 @@ export default function QuickViewModal() {
       isOpen={isQuickViewOpen}
       onClose={() => setQuickViewOpen(false)}
       size="full"
-      className="p-0 overflow-hidden"
+      className="p-0 overflow-y-auto"
     >
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="relative aspect-[3/4] bg-gray-100">

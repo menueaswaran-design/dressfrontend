@@ -39,7 +39,7 @@ export default function InstagramGallery() {
               className="group relative aspect-square bg-gray-100 rounded-lg overflow-hidden cursor-pointer"
             >
               <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400" />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/40 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <Camera className="text-white" size={24} />
               </div>
             </motion.a>

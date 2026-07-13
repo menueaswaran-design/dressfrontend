@@ -39,7 +39,7 @@ export default function TrendingProducts() {
           </div>
           <Link
             href="/shop"
-            className="hidden md:inline-flex items-center gap-1 text-sm font-medium tracking-wider uppercase hover:text-gray-500 transition-colors"
+            className="inline-flex items-center gap-1 text-sm font-medium tracking-wider uppercase hover:text-gray-500 transition-colors"
           >
             View All
             <ChevronRight size={16} />
