@@ -50,12 +50,12 @@ export default function BestSellers() {
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {products.map((product, i) => (
-            <div key={product._id} className="min-w-[140px] md:min-w-[200px] snap-start">
+            <div key={product._id} className="min-w-[calc(50vw-10px)] md:min-w-[200px] snap-start">
               <ProductCard product={product} index={i} />
             </div>
           ))}
           {loading && Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="min-w-[140px] md:min-w-[200px] space-y-3">
+            <div key={i} className="min-w-[calc(50vw-10px)] md:min-w-[200px] space-y-3">
               <div className="aspect-[3/4] bg-gray-200 rounded-xl animate-pulse" />
               <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse" />
               <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse" />
