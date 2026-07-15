@@ -6,15 +6,17 @@ import { motion } from "framer-motion";
 import { Heart, Eye } from "lucide-react";
 import { formatPrice, getDiscountPercentage, getImageUrl, getHoverImage } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
+import { useCartStore } from "@/store/cart";
 import { useWishlistStore } from "@/store/wishlist";
 import { useUIStore } from "@/store/ui";
 
 interface ProductCardProps {
   product: any;
   index?: number;
+  showAddToCart?: boolean;
 }
 
-export default function ProductCard({ product, index = 0 }: ProductCardProps) {
+export default function ProductCard({ product, index = 0, showAddToCart = false }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const user = useAuthStore((s) => s.user);
   const { isInWishlist, addItem, removeItem } = useWishlistStore();
@@ -30,7 +32,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05, duration: 0.4 }}
-      className="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+      className="group relative bg-white overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -50,12 +52,6 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
               }`}
             />
           )}
-          {discount > 0 && (
-            <span className="absolute top-3 left-3 bg-black text-white text-[10px] px-2.5 py-1 rounded-full font-semibold tracking-wider uppercase shadow-lg z-10">
-              -{discount}%
-            </span>
-          )}
-
           <div className="absolute top-3 right-3 flex flex-col gap-1.5 z-10">
             {product.labels?.includes("trending") && (
               <span className="bg-purple-600 text-white text-[9px] px-2 py-0.5 rounded-full font-semibold tracking-wider uppercase shadow-lg">
@@ -102,7 +98,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
                 addItem(item);
               }
             }}
-            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg"
+            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg"
             aria-label={isInWishlist(product._id) ? "Remove from wishlist" : "Add to wishlist"}
           >
             <Heart
@@ -132,10 +128,38 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
         <div className="flex items-center gap-2 mt-1.5">
           <span className="text-sm font-bold">{formatPrice(product.sellingPrice)}</span>
           {product.mrp > product.sellingPrice && (
-            <span className="text-xs text-gray-400 line-through">{formatPrice(product.mrp)}</span>
+            <>
+              <span className="text-xs text-gray-400 line-through">{formatPrice(product.mrp)}</span>
+              <span className="text-[10px] text-green-600 font-semibold">-{getDiscountPercentage(product.mrp, product.sellingPrice)}%</span>
+            </>
           )}
         </div>
       </Link>
+      {showAddToCart && (
+        <div className="px-3 pb-3">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!user) { setLoginOpen(true); return; }
+              useCartStore.getState().addItem({
+                _id: product._id,
+                name: product.name,
+                price: product.sellingPrice,
+                quantity: 1,
+                size: "",
+                color: "",
+                image,
+                stock: product.stock || 99,
+                slug: product.slug,
+              });
+            }}
+            className="w-full mt-2 py-2 text-xs font-semibold tracking-wider uppercase bg-black text-white hover:bg-gray-800 transition-all duration-300"
+          >
+            Add to Cart
+          </button>
+        </div>
+      )}
     </motion.div>
   );
 }

@@ -47,7 +47,7 @@ export default function TrendingProducts() {
         </motion.div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {products.map((product, i) => (
-            <ProductCard key={product._id} product={product} index={i} />
+            <ProductCard key={product._id} product={product} index={i} showAddToCart />
           ))}
           {loading && Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="space-y-3">

@@ -52,20 +52,20 @@ export default function ImageZoom({ src, alt, discount }: ImageZoomProps) {
     <div className="relative">
       <div
         ref={containerRef}
-        className="relative aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden cursor-crosshair select-none"
+        className="relative aspect-[3/4] bg-gray-100 overflow-hidden cursor-crosshair select-none"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onMouseMove={handleMouseMove}
       >
         <img src={src} alt={alt} className="w-full h-full object-cover pointer-events-none" />
         {discount && discount > 0 && (
-          <span className="absolute top-4 left-4 bg-black text-white text-xs px-3 py-1.5 rounded-full font-medium pointer-events-none z-10">
+          <span className="absolute top-4 left-4 bg-black text-white text-xs px-3 py-1.5 font-medium pointer-events-none z-10">
             -{discount}%
           </span>
         )}
         {isHovered && (
           <div
-            className="absolute border-2 border-white rounded-full shadow pointer-events-none z-20"
+            className="absolute border-2 border-white shadow pointer-events-none z-20"
             style={{
               left: `calc(${pct.x}% - ${LENS_SIZE / 2}px)`,
               top: `calc(${pct.y}% - ${LENS_SIZE / 2}px)`,
@@ -79,7 +79,7 @@ export default function ImageZoom({ src, alt, discount }: ImageZoomProps) {
 
       {isHovered && (
         <div
-          className="fixed z-50 border border-gray-200 rounded-lg overflow-hidden shadow-2xl pointer-events-none bg-white"
+          className="fixed z-50 border border-gray-200 overflow-hidden shadow-2xl pointer-events-none bg-white"
           style={{
             left: previewPos.left,
             top: previewPos.top,

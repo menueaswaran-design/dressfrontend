@@ -82,7 +82,7 @@ export default function CheckoutPage() {
     return (
       <div className="max-w-7xl mx-auto px-4 py-16 text-center">
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-green-100 flex items-center justify-center mx-auto mb-4">
             <span className="text-green-600 text-2xl">✓</span>
           </div>
         </motion.div>
@@ -108,7 +108,7 @@ export default function CheckoutPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3 space-y-8">
-          <div className="bg-white border rounded-xl p-6">
+          <div className="bg-white border p-6">
             <h2 className="text-lg font-semibold mb-4">Shipping Address</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input id="name" label="Full Name" placeholder="John Doe" value={form.name} onChange={updateField("name")} />
@@ -122,7 +122,7 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          <div className="bg-white border rounded-xl p-6">
+          <div className="bg-white border p-6">
             <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {paymentMethods.map((method) => {
@@ -131,7 +131,7 @@ export default function CheckoutPage() {
                   <button
                     key={method.id}
                     onClick={() => setPaymentMethod(method.id)}
-                    className={`flex items-center gap-2 p-3 border rounded-xl text-sm transition-all ${
+                    className={`flex items-center gap-2 p-3 border text-sm transition-all ${
                       paymentMethod === method.id
                         ? "border-black bg-black text-white"
                         : "border-gray-200 hover:border-gray-400"
@@ -147,7 +147,7 @@ export default function CheckoutPage() {
         </div>
 
         <div className="lg:col-span-2">
-          <div className="bg-gray-50 rounded-xl p-6 sticky top-24">
+          <div className="bg-gray-50 p-6 sticky top-24">
             <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
             <div className="space-y-3 max-h-64 overflow-auto">
               {items.map((item) => (
@@ -155,7 +155,7 @@ export default function CheckoutPage() {
                   <img
                     src={item.image || "/placeholder.svg"}
                     alt={item.name}
-                    className="w-12 h-14 object-cover rounded"
+                    className="w-12 h-14 object-cover"
                   />
                   <div className="flex-1 min-w-0">
                     <p className="truncate font-medium">{item.name}</p>

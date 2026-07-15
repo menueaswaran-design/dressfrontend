@@ -80,13 +80,13 @@ export default function CartPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="flex gap-4 p-4 bg-white border rounded-xl"
+              className="flex gap-4 p-4 bg-white border"
             >
               <Link href={`/product/${item.slug || item._id}`} className="shrink-0">
                 <img
                   src={item.image || "/placeholder.svg"}
                   alt={item.name}
-                  className="w-24 h-28 md:w-28 md:h-32 object-cover rounded-lg"
+                  className="w-24 h-28 md:w-28 md:h-32 object-cover"
                 />
               </Link>
               <div className="flex-1 min-w-0">
@@ -104,13 +104,13 @@ export default function CartPage() {
                   </div>
                   <button
                     onClick={() => removeItem(item._id, item.size, item.color)}
-                    className="p-1 hover:bg-gray-100 rounded transition-colors"
+                    className="p-1 hover:bg-gray-100 transition-colors"
                   >
                     <X size={16} />
                   </button>
                 </div>
                 <div className="flex items-center gap-2 mt-3">
-                  <div className="flex items-center border rounded-full">
+                  <div className="flex items-center border">
                     <button
                       onClick={() => updateQuantity(item._id, item.size, item.color, item.quantity - 1)}
                       className="px-3 py-1.5 hover:bg-gray-100 transition-colors"
@@ -140,12 +140,12 @@ export default function CartPage() {
         </div>
 
         <div className="lg:col-span-1">
-          <div className="bg-gray-50 rounded-xl p-6 sticky top-24">
+          <div className="bg-gray-50 p-6 sticky top-24">
             <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
 
             <div className="border-b pb-4 mb-4">
               {appliedCoupon ? (
-                <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+                <div className="flex items-center justify-between bg-green-50 border border-green-200 px-3 py-2">
                   <div className="flex items-center gap-2 text-sm">
                     <Tag size={14} className="text-green-600" />
                     <span className="font-medium text-green-700">{appliedCoupon.code}</span>
@@ -160,7 +160,7 @@ export default function CartPage() {
                     value={couponCode}
                     onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                     placeholder="Coupon code"
-                    className="flex-1 px-3 py-2 text-sm border rounded-lg focus:outline-none focus:border-black"
+                    className="flex-1 px-3 py-2 text-sm border focus:outline-none focus:border-black"
                     onKeyDown={(e) => e.key === "Enter" && handleApplyCoupon()}
                   />
                   <Button onClick={handleApplyCoupon} disabled={couponLoading || !couponCode.trim()} size="sm">

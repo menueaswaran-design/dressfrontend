@@ -77,7 +77,7 @@ export default function QuickViewModal() {
               {variantImages.map((url: string, i: number) => (
                 <button
                   key={i}
-                  className="shrink-0 w-10 h-12 rounded-md overflow-hidden border-2 border-white/80 shadow-sm"
+                  className="shrink-0 w-10 h-12 overflow-hidden border-2 border-white/80 shadow-sm"
                 >
                   <img src={url} alt="" className="w-full h-full object-cover" />
                 </button>
@@ -90,7 +90,7 @@ export default function QuickViewModal() {
                 <button
                   key={i}
                   onClick={() => { setSelectedVariantIdx(i); setSelectedSize(""); }}
-                  className={`shrink-0 w-10 h-12 rounded-md overflow-hidden border-2 transition-all ${
+                  className={`shrink-0 w-10 h-12 overflow-hidden border-2 transition-all ${
                     selectedVariantIdx === i ? "border-black" : "border-white/80"
                   } shadow-sm`}
                 >
@@ -131,7 +131,7 @@ export default function QuickViewModal() {
                       key={s.size}
                       onClick={() => !outOfStock && setSelectedSize(s.size)}
                       disabled={outOfStock}
-                      className={`w-12 h-12 rounded-full border text-sm font-medium transition-all ${
+                      className={`w-12 h-12 border text-sm font-medium transition-all ${
                         selectedSize === s.size
                           ? "bg-black text-white border-black"
                           : outOfStock
@@ -149,7 +149,7 @@ export default function QuickViewModal() {
             </div>
 
             <div className="flex items-center gap-4 mt-6">
-              <div className="flex items-center border rounded-full">
+              <div className="flex items-center border">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="px-3 py-2 hover:bg-gray-100 transition-colors"
@@ -177,7 +177,7 @@ export default function QuickViewModal() {
                   if (isInWishlist(product._id)) removeItem(product._id);
                   else addItem(item);
                 }}
-                className={`p-3 rounded-full border transition-colors ${
+                className={`p-3 border transition-colors ${
                   isInWishlist(product._id)
                     ? "bg-black text-white border-black"
                     : "border-gray-300 hover:border-black"

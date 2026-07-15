@@ -15,17 +15,17 @@ import { cn } from "@/lib/utils";
 import api from "@/lib/api";
 
 const fallbackLinks = [
-  { label: "New Arrivals", href: "/shop?label=new" },
+  { label: "Home", href: "/" },
   { label: "Men", href: "/shop?gender=men" },
   { label: "Women", href: "/shop?gender=women" },
   { label: "Oversized", href: "/shop?category=oversized" },
-  { label: "Hoodies", href: "/shop?category=hoodies" },
-  { label: "Sale", href: "/shop?label=sale" },
 ];
 
 export default function Navbar() {
   const [navLinks, setNavLinks] = useState<{ label: string; href: string }[]>([]);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -60,10 +60,27 @@ export default function Navbar() {
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const checkDesktop = () => setIsDesktop(window.innerWidth >= 768);
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop);
+    return () => window.removeEventListener("resize", checkDesktop);
   }, []);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 20);
+      if (isDesktop && currentScrollY > 80 && currentScrollY > lastScrollY) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
+      lastScrollY = currentScrollY;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isDesktop]);
 
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -75,44 +92,53 @@ export default function Navbar() {
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
+          isDesktop && hidden ? "-translate-y-full" : "translate-y-0",
           scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-sm"
-            : "bg-white"
+            ? "bg-green-100/95 backdrop-blur-md shadow-sm"
+            : "bg-green-100"
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            <button
-              className="md:hidden p-2 -ml-2"
-              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
+          <div className="grid grid-cols-3 items-center h-16 md:h-20">
+            <div className="flex items-center justify-self-start">
+              <button
+                className="md:hidden p-2 -ml-2"
+                onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+              <button
+                className="md:hidden p-2"
+                onClick={() => setSearchOpen(true)}
+                aria-label="Search"
+              >
+                <Search size={20} />
+              </button>
+              <nav className="hidden md:flex items-center space-x-8">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      "text-sm tracking-wider uppercase transition-colors hover:text-gray-500",
+                      pathname === link.href && "font-semibold"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
 
-            <Link href="/" className="text-2xl md:text-3xl font-bold tracking-tighter">
-              DRESS
+            <Link href="/" className="flex justify-center">
+              <img src="/lo.png" alt="DRESS" className="h-12 md:h-16 w-auto" />
             </Link>
 
-            <nav className="hidden md:flex items-center space-x-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "text-sm tracking-wider uppercase transition-colors hover:text-gray-500",
-                    pathname === link.href && "font-semibold"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            <div className="flex items-center space-x-3 md:space-x-5">
+            <div className="flex items-center justify-end space-x-3 md:space-x-5">
               <button
                 onClick={() => setSearchOpen(true)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="hidden md:block p-2 hover:bg-gray-100 rounded-full transition-colors"
                 aria-label="Search"
               >
                 <Search size={20} />

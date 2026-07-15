@@ -43,7 +43,7 @@ export default function CartDrawer() {
                 <ShoppingBag size={20} />
                 Cart ({items.length})
               </h2>
-              <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-gray-100 rounded-full">
+                <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-gray-100">
                 <X size={20} />
               </button>
             </div>
@@ -56,11 +56,11 @@ export default function CartDrawer() {
                 </div>
               ) : (
                 items.map((item) => (
-                  <div key={`${item._id}-${item.size}-${item.color}`} className="flex gap-4 p-3 bg-gray-50 rounded-lg">
+                  <div key={`${item._id}-${item.size}-${item.color}`} className="flex gap-4 p-3 bg-gray-50">
                     <img
                       src={item.image || "/placeholder.svg"}
                       alt={item.name}
-                      className="w-20 h-24 object-cover rounded-md shrink-0"
+                      className="w-20 h-24 object-cover shrink-0"
                     />
                     <div className="flex-1 min-w-0">
                       <h3 className="font-medium text-sm truncate">{item.name}</h3>

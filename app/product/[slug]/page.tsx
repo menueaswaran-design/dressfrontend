@@ -87,7 +87,7 @@ export default function ProductDetailPage() {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-          <Skeleton className="aspect-[3/4] w-full rounded-xl" />
+          <Skeleton className="aspect-[3/4] w-full" />
           <div className="space-y-4">
             <Skeleton className="h-8 w-3/4" />
             <Skeleton className="h-6 w-1/3" />
@@ -145,7 +145,7 @@ export default function ProductDetailPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-4">
         <div className="space-y-3">
-          <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-gray-50">
+          <div className="relative aspect-[3/4] overflow-hidden bg-gray-50">
             <ImageZoom
               key={`${selectedSize}-${selectedImage}`}
               src={displayImages[selectedImage]?.url || displayImages[0]?.url}
@@ -159,7 +159,7 @@ export default function ProductDetailPage() {
                 <button
                   key={i}
                   onClick={() => setSelectedImage(i)}
-                  className={`shrink-0 w-14 h-18 sm:w-16 sm:h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                  className={`shrink-0 w-14 h-18 sm:w-16 sm:h-20 overflow-hidden border-2 transition-all ${
                     selectedImage === i
                       ? "border-black ring-1 ring-black"
                       : "border-transparent hover:border-gray-300"
@@ -176,7 +176,7 @@ export default function ProductDetailPage() {
                 <button
                   key={i}
                   onClick={() => { setSelectedVariantIdx(i); setSelectedImage(0); setSelectedSize(""); }}
-                  className={`shrink-0 w-14 h-18 sm:w-16 sm:h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                  className={`shrink-0 w-14 h-18 sm:w-16 sm:h-20 overflow-hidden border-2 transition-all ${
                     selectedVariantIdx === i
                       ? "border-black ring-1 ring-black"
                       : "border-transparent hover:border-gray-300"
@@ -233,7 +233,7 @@ export default function ProductDetailPage() {
                         key={s.size}
                         onClick={() => { setSelectedSize(s.size); setSelectedImage(0); }}
                         disabled={outOfStock}
-                        className={`w-10 h-10 rounded-lg border text-xs font-medium transition-all ${
+                        className={`w-10 h-10 border text-xs font-medium transition-all ${
                           selectedSize === s.size
                             ? "bg-black text-white border-black"
                             : outOfStock
@@ -252,7 +252,7 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="flex items-center gap-4 mt-6">
-              <div className="flex items-center border rounded-full">
+              <div className="flex items-center border">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="px-4 py-2.5 hover:bg-gray-100 transition-colors"
@@ -281,7 +281,7 @@ export default function ProductDetailPage() {
                   if (isInWishlist(product._id)) removeItem(product._id);
                   else addItem(item);
                 }}
-                className={`p-3 rounded-full border transition-colors ${
+                className={`p-3 border transition-colors ${
                   isInWishlist(product._id)
                     ? "bg-black text-white border-black"
                     : "border-gray-300 hover:border-black"
@@ -293,7 +293,7 @@ export default function ProductDetailPage() {
 
               <button
                 onClick={() => navigator.share?.({ title: product.name, url: window.location.href })}
-                className="p-3 rounded-full border border-gray-300 hover:border-black transition-colors"
+                className="p-3 border border-gray-300 hover:border-black transition-colors"
                 aria-label="Share"
               >
                 <Share2 size={20} />

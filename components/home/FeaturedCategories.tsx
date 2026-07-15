@@ -55,8 +55,8 @@ export default function FeaturedCategories() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="min-w-[180px] md:min-w-[220px] snap-start">
-                <Skeleton className="aspect-square rounded-xl" />
+              <div key={i} className="min-w-[65vw] md:min-w-[220px] snap-start">
+                <Skeleton className="aspect-square" />
               </div>
             ))}
           </div>
@@ -105,7 +105,7 @@ export default function FeaturedCategories() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="min-w-[180px] md:min-w-[220px] snap-start"
+              className="min-w-[65vw] md:min-w-[220px] snap-start"
             >
               <Link
                 href={`/category/${cat.slug}`}

@@ -82,7 +82,7 @@ export default function HeroBanner() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-4xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight"
+            className="text-4xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight font-playfair"
           >
             {banner.heading || "Wear Confidence"}
           </motion.h1>
@@ -91,7 +91,7 @@ export default function HeroBanner() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            className="mt-4 md:mt-6 text-sm md:text-lg text-gray-200 tracking-wide max-w-md mx-auto"
+            className="mt-4 md:mt-6 text-sm md:text-lg text-gray-200 tracking-wide max-w-md mx-auto font-playfair"
           >
             {banner.subHeading || "Premium fashion for the modern individual"}
           </motion.p>
