@@ -44,11 +44,6 @@ export const ORDER_STATUS = {
 
 export const PAYMENT_METHODS = [
   { id: "upi", label: "UPI", icon: "smartphone" },
-  { id: "credit_card", label: "Credit Card", icon: "credit-card" },
-  { id: "debit_card", label: "Debit Card", icon: "credit-card" },
-  { id: "wallet", label: "Wallet", icon: "wallet" },
-  { id: "net_banking", label: "Net Banking", icon: "building" },
-  { id: "cod", label: "Cash on Delivery", icon: "banknote" },
 ];
 
 

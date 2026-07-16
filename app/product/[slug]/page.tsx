@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Heart, Share2, Truck, RotateCcw, Shield } from "lucide-react";
+import { Heart, Truck, RotateCcw, Shield } from "lucide-react";
 import api from "@/lib/api";
 import { formatPrice, getImageUrl } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
@@ -233,7 +233,7 @@ export default function ProductDetailPage() {
                         key={s.size}
                         onClick={() => { setSelectedSize(s.size); setSelectedImage(0); }}
                         disabled={outOfStock}
-                        className={`w-10 h-10 border text-xs font-medium transition-all ${
+                        className={`w-10 h-10 border text-xs font-medium transition-all rounded-lg ${
                           selectedSize === s.size
                             ? "bg-black text-white border-black"
                             : outOfStock
@@ -252,7 +252,7 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="flex items-center gap-4 mt-6">
-              <div className="flex items-center border">
+              <div className="flex items-center border rounded-lg overflow-hidden">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="px-4 py-2.5 hover:bg-gray-100 transition-colors"
@@ -290,14 +290,6 @@ export default function ProductDetailPage() {
               >
                 <Heart size={20} className={isInWishlist(product._id) ? "fill-white" : ""} />
               </button>
-
-              <button
-                onClick={() => navigator.share?.({ title: product.name, url: window.location.href })}
-                className="p-3 border border-gray-300 hover:border-black transition-colors"
-                aria-label="Share"
-              >
-                <Share2 size={20} />
-              </button>
             </div>
 
             <div className="flex flex-col gap-3 mt-8">
@@ -305,11 +297,11 @@ export default function ProductDetailPage() {
                 size="lg"
                 fullWidth
                 onClick={handleAddToCart}
-                disabled={!selectedSize}
+                disabled={!selectedSize || addedToCart}
               >
                 {addedToCart ? "Added to Cart!" : selectedSize ? "Add to Cart" : "Select a Size"}
               </Button>
-              <Button variant="outline" size="lg" fullWidth disabled={!selectedSize} onClick={handleBuyNow}>
+              <Button variant="outline" size="lg" fullWidth disabled={!selectedSize || addedToCart} onClick={handleBuyNow}>
                 Buy Now
               </Button>
             </div>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Heart, Eye } from "lucide-react";
+import { Heart, Eye, ShoppingBag } from "lucide-react";
 import { formatPrice, getDiscountPercentage, getImageUrl, getHoverImage } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
 import { useCartStore } from "@/store/cart";
@@ -18,6 +18,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, index = 0, showAddToCart = false }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
   const user = useAuthStore((s) => s.user);
   const { isInWishlist, addItem, removeItem } = useWishlistStore();
   const setQuickViewOpen = useUIStore((s) => s.setQuickViewOpen);
@@ -153,10 +154,13 @@ export default function ProductCard({ product, index = 0, showAddToCart = false 
                 stock: product.stock || 99,
                 slug: product.slug,
               });
+              setAddedToCart(true);
+              setTimeout(() => setAddedToCart(false), 2000);
             }}
             className="w-full mt-2 py-2 text-xs font-semibold tracking-wider uppercase bg-black text-white hover:bg-gray-800 transition-all duration-300"
+            disabled={addedToCart}
           >
-            Add to Cart
+            {addedToCart ? "✓ Added" : "Add to Cart"}
           </button>
         </div>
       )}
