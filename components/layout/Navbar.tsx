@@ -132,7 +132,7 @@ export default function Navbar() {
             </div>
 
             <Link href="/" className="flex justify-center">
-              <img src="/lo.png" alt="DRESS" className="h-12 md:h-16 w-auto" />
+              <img src="/lo.png" alt="DRESS" className="h-[72px] md:h-24 w-auto brightness-0" />
             </Link>
 
             <div className="flex items-center justify-end space-x-3 md:space-x-5">

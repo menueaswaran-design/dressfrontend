@@ -26,7 +26,7 @@ export function PhonePeIcon({ size = 44 }: { size?: number }) {
 
 export function PaytmIcon({ size = 44 }: { size?: number }) {
   return (
-    <div className="flex items-center justify-center bg-[#00BAF2] rounded-xl" style={{ width: size, height: size }}>
+    <div className="flex items-center justify-center bg-white border border-gray-200 rounded-xl" style={{ width: size, height: size }}>
       <img
         src="/images/payments/paytm.png"
         alt="Paytm"
