@@ -65,7 +65,7 @@ export default function NewArrivals() {
         >
           {products.map((product, i) => (
             <div key={product._id} className="min-w-[140px] md:min-w-[175px] snap-start">
-              <ProductCard product={product} index={i} />
+              <ProductCard product={product} index={i} showWishlist={false} />
             </div>
           ))}
         </div>

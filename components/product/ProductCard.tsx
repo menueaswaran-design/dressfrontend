@@ -14,9 +14,10 @@ interface ProductCardProps {
   product: any;
   index?: number;
   showAddToCart?: boolean;
+  showWishlist?: boolean;
 }
 
-export default function ProductCard({ product, index = 0, showAddToCart = false }: ProductCardProps) {
+export default function ProductCard({ product, index = 0, showAddToCart = false, showWishlist = true }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const user = useAuthStore((s) => s.user);
@@ -81,32 +82,34 @@ export default function ProductCard({ product, index = 0, showAddToCart = false 
             )}
           </div>
 
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (!user) { setLoginOpen(true); return; }
-              const item = {
-                _id: product._id,
-                name: product.name,
-                price: product.sellingPrice,
-                image,
-                slug: product.slug,
-              };
-              if (isInWishlist(product._id)) {
-                removeItem(product._id);
-              } else {
-                addItem(item);
-              }
-            }}
-            className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg"
-            aria-label={isInWishlist(product._id) ? "Remove from wishlist" : "Add to wishlist"}
-          >
-            <Heart
-              size={16}
-              className={isInWishlist(product._id) ? "fill-black text-black" : "text-black"}
-            />
-          </button>
+          {showWishlist && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (!user) { setLoginOpen(true); return; }
+                const item = {
+                  _id: product._id,
+                  name: product.name,
+                  price: product.sellingPrice,
+                  image,
+                  slug: product.slug,
+                };
+                if (isInWishlist(product._id)) {
+                  removeItem(product._id);
+                } else {
+                  addItem(item);
+                }
+              }}
+              className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 shadow-lg"
+              aria-label={isInWishlist(product._id) ? "Remove from wishlist" : "Add to wishlist"}
+            >
+              <Heart
+                size={16}
+                className={isInWishlist(product._id) ? "fill-black text-black" : "text-black"}
+              />
+            </button>
+          )}
 
           <button
             onClick={(e) => {

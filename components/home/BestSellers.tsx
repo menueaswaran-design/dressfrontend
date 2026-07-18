@@ -51,7 +51,7 @@ export default function BestSellers() {
         >
           {products.map((product, i) => (
             <div key={product._id} className="min-w-[calc(50vw-10px)] md:min-w-[200px] snap-start">
-              <ProductCard product={product} index={i} />
+              <ProductCard product={product} index={i} showWishlist={false} />
             </div>
           ))}
           {loading && Array.from({ length: 4 }).map((_, i) => (
